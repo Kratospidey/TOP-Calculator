@@ -1,179 +1,136 @@
-function numberAdd(a, b) {
+let firstOperand = "";
+let secondOperand = "";
+let currentOperation = null;
+let shouldResetScreen = false;
+
+const numberButtons = document.querySelectorAll(".digits");
+const operatorButtons = document.querySelectorAll(".operator");
+const equalsButton = document.getElementById("cal-equal");
+const clearButton = document.getElementById("cal-clear");
+const deleteButton = document.getElementById("cal-delete");
+const pointButton = document.getElementById("cal-period");
+const lastOperationScreen = document.getElementById("cal-lastoperation");
+const currentOperationScreen = document.getElementById("cal-currentoperation");
+
+equalsButton.addEventListener("click", evaluate);
+clearButton.addEventListener("click", clear);
+deleteButton.addEventListener("click", deleteNumber);
+pointButton.addEventListener("click", appendPoint);
+
+numberButtons.forEach((button) =>
+	button.addEventListener("click", () => appendNumber(button.textContent))
+);
+
+operatorButtons.forEach((button) =>
+	button.addEventListener("click", () => setOperation(button.textContent))
+);
+
+function appendNumber(number) {
+	if (currentOperationScreen.textContent === "0" || shouldResetScreen)
+		resetScreen();
+	currentOperationScreen.textContent += number;
+}
+
+function resetScreen() {
+	currentOperationScreen.textContent = "";
+	shouldResetScreen = false;
+}
+
+function clear() {
+	currentOperationScreen.textContent = "0";
+	lastOperationScreen.textContent = "";
+	firstOperand = "";
+	secondOperand = "";
+	currentOperation = null;
+}
+
+function appendPoint() {
+	if (shouldResetScreen) resetScreen();
+	if (currentOperationScreen.textContent === "")
+		currentOperationScreen.textContent = "0";
+	if (currentOperationScreen.textContent.includes(".")) return;
+	currentOperationScreen.textContent += ".";
+}
+
+function deleteNumber() {
+	currentOperationScreen.textContent = currentOperationScreen.textContent
+		.toString()
+		.slice(0, -1);
+}
+
+function setOperation(operator) {
+	if (currentOperation !== null) evaluate();
+	firstOperand = currentOperationScreen.textContent;
+	currentOperation = operator;
+	lastOperationScreen.textContent = `${firstOperand} ${currentOperation}`;
+	shouldResetScreen = true;
+}
+
+function evaluate() {
+	if (currentOperation === null || shouldResetScreen) return;
+	if (currentOperation === "÷" && currentOperationScreen.textContent === "0") {
+		alert("You can't divide by 0!");
+		return;
+	}
+	secondOperand = currentOperationScreen.textContent;
+	currentOperationScreen.textContent = roundResult(
+		operate(currentOperation, firstOperand, secondOperand)
+	);
+	lastOperationScreen.textContent = `${firstOperand} ${currentOperation} ${secondOperand} =`;
+	currentOperation = null;
+}
+
+function roundResult(number) {
+	return Math.round(number * 1000) / 1000;
+}
+
+function handleKeyboardInput(e) {
+	if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+	if (e.key === ".") appendPoint();
+	if (e.key === "=" || e.key === "Enter") evaluate();
+	if (e.key === "Backspace") deleteNumber();
+	if (e.key === "Escape") clear();
+	if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/")
+		setOperation(convertOperator(e.key));
+}
+
+function convertOperator(keyboardOperator) {
+	if (keyboardOperator === "/") return "÷";
+	if (keyboardOperator === "*") return "×";
+	if (keyboardOperator === "-") return "−";
+	if (keyboardOperator === "+") return "+";
+}
+
+function add(a, b) {
 	return a + b;
 }
 
-function numberSubtract(a, b) {
+function substract(a, b) {
 	return a - b;
 }
 
-function numberMultiply(a, b) {
+function multiply(a, b) {
 	return a * b;
 }
 
-function numberDivide(a, b) {
+function divide(a, b) {
 	return a / b;
 }
 
-let firstOperand = null;
-let secondOperand = null;
-let stringExpression = "";
-let operator = null;
-let periodPressed = false;
-
-function operate(a, b, operator) {
-	if (operator == "+") {
-		a = +a;
-		b = +b;
-		return numberAdd(a, b);
-	} else if (operator == "-") {
-		a = +a;
-		b = +b;
-		return numberSubtract(a, b);
-	} else if (operator == "*") {
-		a = +a;
-		b = +b;
-		return numberMultiply(a, b);
-	} else if (operator == "/") {
-		a = +a;
-		b = +b;
-		return numberDivide(a, b);
+function operate(operator, a, b) {
+	a = Number(a);
+	b = Number(b);
+	switch (operator) {
+		case "+":
+			return add(a, b);
+		case "-":
+			return substract(a, b);
+		case "x":
+			return multiply(a, b);
+		case "÷":
+			if (b === 0) return null;
+			else return divide(a, b);
+		default:
+			return null;
 	}
-}
-
-// Step 1: Get references to display elements
-const lastOperationDisplay = document.getElementById("cal-lastoperation");
-const currentOperationDisplay = document.getElementById("cal-currentoperation");
-
-// Get reference to the parent element of digit buttons
-const digitButtonsParent = document.getElementById("cal-columns");
-
-// Attach a single event listener to the parent element
-digitButtonsParent.addEventListener("click", (event) => {
-	const clickedElement = event.target.closest(".digits");
-
-	// Check if the clicked element is a digit button
-	if (clickedElement) {
-		// Logic for handling the digit button click
-		const digit = clickedElement.textContent;
-		if (currentOperationDisplay.innerText == "0") {
-			currentOperationDisplay.innerText = digit;
-		} else {
-			currentOperationDisplay.innerText += digit;
-		}
-		stringExpression += digit;
-		console.log("clicked");
-		// ...
-	}
-});
-
-// Step 3: Implement operation logic
-// Example for operator button addition
-const buttonAddition = document.getElementById("cal-addition");
-buttonAddition.addEventListener("click", () => {
-	currentOperationDisplay.innerText = "0";
-	decideOperand(stringExpression);
-	stringExpression = "";
-	evaluate(firstOperand, secondOperand, "+");
-	periodPressed = false;
-});
-
-const buttonSubtract = document.getElementById("cal-subtract");
-buttonSubtract.addEventListener("click", () => {
-	currentOperationDisplay.innerText = "0";
-	decideOperand(stringExpression);
-	stringExpression = "";
-	evaluate(firstOperand, secondOperand, "-");
-	periodPressed = false;
-});
-const buttonMultiply = document.getElementById("cal-multiply");
-buttonMultiply.addEventListener("click", () => {
-	currentOperationDisplay.innerText = "0";
-	decideOperand(stringExpression);
-	stringExpression = "";
-	evaluate(firstOperand, secondOperand, "*");
-	periodPressed = false;
-});
-const buttonDivide = document.getElementById("cal-divide");
-buttonDivide.addEventListener("click", () => {
-	currentOperationDisplay.innerText = "0";
-	decideOperand(stringExpression);
-	stringExpression = "";
-	evaluate(firstOperand, secondOperand, "/");
-	periodPressed = false;
-});
-
-const buttonPeriod = document.getElementById("cal-period");
-buttonPeriod.addEventListener("click", () => {
-	if (!periodPressed) {
-		if (stringExpression == "") {
-			stringExpression += "0.";
-		} else {
-			stringExpression += ".";
-		}
-		currentOperationDisplay.innerText = stringExpression;
-		periodPressed = true;
-	}
-});
-
-// Step 4: Implement clear and delete logic
-// Example for clear button
-const buttonClear = document.getElementById("cal-clear");
-buttonClear.addEventListener("click", clear);
-
-function clear() {
-	firstOperand = null;
-	secondOperand = null;
-	stringExpression = "";
-	currentOperationDisplay.innerText = "0";
-	lastOperationDisplay.innerText = "";
-	operator = null;
-	periodPressed = false;
-}
-
-// Example for delete button
-const buttonDelete = document.getElementById("cal-delete");
-buttonDelete.addEventListener("click", () => {
-	// Logic for deleting the last character
-	currentOperationDisplay.innerText = currentOperationDisplay.innerText.slice(
-		0,
-		-1
-	);
-});
-
-const buttonEqual = document.getElementById("cal-equal");
-buttonEqual.addEventListener("click", () => {
-	decideOperand(stringExpression);
-	let fo = firstOperand;
-	let so = secondOperand;
-	let op = operator;
-	let result = operate(firstOperand, secondOperand, operator);
-	firstOperand = null; // Reset the first operand
-	secondOperand = null; // Reset the second operand
-	stringExpression = ""; // Reset the expression
-	lastOperationDisplay.innerText = `${fo} ${op} ${so} =`;
-	currentOperationDisplay.innerText = result;
-});
-
-function decideOperand(val) {
-	console.log(val);
-	if (firstOperand === null) {
-		firstOperand = val;
-	} else {
-		secondOperand = val;
-	}
-}
-
-function evaluate(fo, so, op) {
-	if (so == null) {
-		lastOperationDisplay.innerText = `${fo} ${op}`;
-	} else {
-		if (operator !== null) {
-			firstOperand = operate(firstOperand, so, operator);
-			lastOperationDisplay.innerText = `${firstOperand} ${op}`;
-		} else {
-			firstOperand = operate(fo, so, op);
-			lastOperationDisplay.innerText = firstOperand;
-		}
-	}
-	operator = op;
 }
