@@ -1,0 +1,134 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #f6f6f6;
+}
+
+#cal-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+#cal-body {
+	width: 420px;
+	height: 570px;
+	background-color: #aaaaaa;
+	border: 2px solid black;
+	border-radius: 25px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Adjust the values as desired */
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+	padding: 25px;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+#cal-display {
+	width: 380px;
+	height: 130px;
+	background-color: #eeeeee;
+	border: 2px solid black;
+	border-radius: 7px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: end;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+}
+
+#cal-currentoperation,
+#cal-lastoperation {
+	font-size: 35px;
+	font-weight: 500;
+}
+
+#cal-lastoperation {
+	font-size: 20px;
+	font-weight: 450px;
+}
+
+#cal-columns {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+#cal-headerbuttons {
+	display: flex;
+	gap: 15px;
+}
+
+#cal-clear,
+#cal-delete {
+	width: 180px;
+	height: 70px;
+	background-color: #eeeeee;
+	border: 2px solid black;
+	border-radius: 7px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	user-select: none;
+}
+
+#cal-clear {
+	background-color: #ffaaaa;
+}
+#cal-clear:hover {
+	background-color: #ee9999;
+}
+
+#cal-delete {
+	background-color: #aaaaff;
+}
+#cal-delete:hover {
+	background-color: #9999ee;
+}
+
+#cal-clear p,
+#cal-delete p {
+	font-size: x-large;
+}
+
+#cal-firstrow,
+#cal-secondrow,
+#cal-thirdrow,
+#cal-fourthrow {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+	justify-content: space-around;
+}
+
+#cal-firstrow div,
+#cal-secondrow div,
+#cal-thirdrow div,
+#cal-fourthrow div {
+	width: 90px;
+	height: 60px;
+	background-color: #eeeeee;
+	border: 2px solid black;
+	border-radius: 7px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: x-large;
+	cursor: pointer;
+	user-select: none;
+}
+#cal-firstrow div:hover,
+#cal-secondrow div:hover,
+#cal-thirdrow div:hover,
+#cal-fourthrow div:hover {
+	background-color: #dddddd;
+}
