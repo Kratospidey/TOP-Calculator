@@ -96,8 +96,8 @@ function handleKeyboardInput(e) {
 
 function convertOperator(keyboardOperator) {
 	if (keyboardOperator === "/") return "÷";
-	if (keyboardOperator === "*") return "×";
-	if (keyboardOperator === "-") return "−";
+	if (keyboardOperator === "*") return "x";
+	if (keyboardOperator === "-") return "-";
 	if (keyboardOperator === "+") return "+";
 }
 
