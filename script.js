@@ -146,17 +146,12 @@ buttonEqual.addEventListener("click", () => {
 	let fo = firstOperand;
 	let so = secondOperand;
 	let op = operator;
-
-	if (!isNaN(fo) && !isNaN(so) && op !== null) {
-		let result = operate(fo, so, op);
-		secondOperand = null;
-		stringExpression = "";
-		lastOperationDisplay.innerText = `${fo} ${op} ${so} =`;
-		currentOperationDisplay.innerText = result;
-	} else {
-		lastOperationDisplay.innerText = "";
-		currentOperationDisplay.innerText = "Error";
-	}
+	let result = operate(firstOperand, secondOperand, operator);
+	firstOperand = null; // Reset the first operand
+	secondOperand = null; // Reset the second operand
+	stringExpression = ""; // Reset the expression
+	lastOperationDisplay.innerText = `${fo} ${op} ${so} =`;
+	currentOperationDisplay.innerText = result;
 });
 
 function decideOperand(val) {
