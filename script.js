@@ -20,23 +20,23 @@ let stringExpression = "";
 let operator = null;
 let periodPressed = false;
 
-function operate(firstOperand, secondOperand, operator) {
+function operate(a, b, operator) {
 	if (operator == "+") {
-		firstOperand = +firstOperand;
-		secondOperand = +secondOperand;
-		return numberAdd(firstOperand, secondOperand);
+		a = +a;
+		b = +b;
+		return numberAdd(a, b);
 	} else if (operator == "-") {
-		firstOperand = +firstOperand;
-		secondOperand = +secondOperand;
-		return numberSubtract(firstOperand, secondOperand);
+		a = +a;
+		b = +b;
+		return numberSubtract(a, b);
 	} else if (operator == "*") {
-		firstOperand = +firstOperand;
-		secondOperand = +secondOperand;
-		return numberMultiply(firstOperand, secondOperand);
+		a = +a;
+		b = +b;
+		return numberMultiply(a, b);
 	} else if (operator == "/") {
-		firstOperand = +firstOperand;
-		secondOperand = +secondOperand;
-		return numberDivide(firstOperand, secondOperand);
+		a = +a;
+		b = +b;
+		return numberDivide(a, b);
 	}
 }
 
@@ -146,11 +146,17 @@ buttonEqual.addEventListener("click", () => {
 	let fo = firstOperand;
 	let so = secondOperand;
 	let op = operator;
-	let result = operate(firstOperand, secondOperand, operator);
-	firstOperand = result;
-	secondOperand = null;
-	lastOperationDisplay.innerText = `${fo} ${op} ${so} =`;
-	currentOperationDisplay.innerText = result;
+
+	if (!isNaN(fo) && !isNaN(so) && op !== null) {
+		let result = operate(fo, so, op);
+		secondOperand = null;
+		stringExpression = "";
+		lastOperationDisplay.innerText = `${fo} ${op} ${so} =`;
+		currentOperationDisplay.innerText = result;
+	} else {
+		lastOperationDisplay.innerText = "";
+		currentOperationDisplay.innerText = "Error";
+	}
 });
 
 function decideOperand(val) {
